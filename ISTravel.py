@@ -17,6 +17,7 @@ import sys
 
 # Function definitions
 def try_int(x):
+    """Tries to convert argument to type int."""
     try:
         return int(x)
     except ValueError:
@@ -25,6 +26,7 @@ def try_int(x):
 
 # Class definitions
 class InputData:
+    """Structures the input data."""
     def __init__(self, network, clients):
 
         # Network configuration
