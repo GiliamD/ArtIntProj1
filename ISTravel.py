@@ -10,7 +10,12 @@
 import sys
 
 # Import files
-network = sys.argv[1]
-clients = sys.argv[2]
+netFileName = sys.argv[1]
+cliFileName = sys.argv[2]
 
-print(network)
+network = open(netFileName,'r')
+clients = open(cliFileName,'r')
+
+
+
+
