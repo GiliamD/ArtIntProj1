@@ -1,0 +1,16 @@
+15
+1 7 17 2035 custo 1 B2 12
+2 15 9 1000 tempo 1 B1 43986
+3 14 11 529 tempo 1 A1 comboio
+4 21 5 427 custo 1 B2 12
+5 15 1 2102 tempo 2 A1 comboio B1 43986
+6 16 8 2754 custo 2 A3 2 B2 12
+7 24 23 274 tempo 0
+8 7 14 392 tempo 2 A3 1 B1 43986
+9 15 12 1656 custo 1 B2 12
+10 8 1 2398 custo 0
+11 15 25 2820 tempo 1 A1 aviao
+12 21 10 1730 tempo 0
+13 25 9 1452 tempo 1 B1 43986
+14 8 10 1118 tempo 2 A1 aviao B1 43986
+15 13 9 1519 custo 2 A1 barco B2 12

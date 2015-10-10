@@ -1,0 +1,9 @@
+8
+1 7 2 1872 tempo 0
+2 6 5 95 tempo 1 B1 57273
+3 2 10 1757 tempo 2 A1 aviao B1 57273
+4 3 1 44 custo 0
+5 6 12 1738 tempo 1 B1 57273
+6 6 5 2575 tempo 2 A3 2 B1 57273
+7 10 5 2278 custo 0
+8 6 9 996 custo 0
