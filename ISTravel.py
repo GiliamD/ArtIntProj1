@@ -7,6 +7,10 @@
 ######################################################
 
 # Import libraries
-
+import sys
 
 # Import files
+network = sys.argv[1]
+clients = sys.argv[2]
+
+print(network)
