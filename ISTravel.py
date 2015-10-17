@@ -234,6 +234,6 @@ def uniform_cost(graph, start, goal):
 #     results.append(...)
 #
 # # Write results to output file. The the results from both algorithms should be the same, i.e. the optimal solution
-# outputFile = open(cliFileName+'.sol','w')
+# outputFile = open(cliFileName.strip('.cli')+'.sol','w')
 # outputFile.writelines(results)
 # outputFile.close()
