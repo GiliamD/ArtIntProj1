@@ -46,6 +46,7 @@ for nod in nodes: print(nod)            # just prints what came out
 
 # Informed search algorithm
 
+
 def a_star(graph, start, goal, heuristic):
     """Searches the state space for the optimal path from the initial state to the goal state, minimizing the value
     function f(n) = g(n) + h(n), where g(n) is the cost from the initial node to the current node n and h(n) is the
