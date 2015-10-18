@@ -1,5 +1,9 @@
-# function definitions
+# Class definitions file
 
+import heapq
+
+
+# Tries to return integer equivalent of input, if input is not convertible, returns input
 
 def try_int(x):
     """Tries to convert argument to type int."""
@@ -7,10 +11,6 @@ def try_int(x):
         return int(x)
     except ValueError:
         return x
-
-# class definitions
-
-import heapq
 
 
 class PriorityQueue:
@@ -45,7 +45,7 @@ class InputData:
 
         # Client requests
         client_data = [line.rstrip().split() for line in clients]
-        self.nClients = try_int(network_data[0][0])
+        self.nClients = try_int(client_data[0][0])
         self.clData = [[try_int(client_data[lst][elem]) for elem in range(len(client_data[lst]))] for lst in
                         range(1, len(client_data))]
 
@@ -80,13 +80,13 @@ class Edge:
         self.depInterval = edge[7]  # time between departures
 
     def __repr__(self):
-        return "<cities: %2d %2d, vehicle: %9s, time: %4d, cost: %3d, first: %4d, border: %4d, interval: %4d>" % (self.cities[0], self.cities[1], self.vehicle, self.time, self.cost, self.firstDep, self.borderTime, self.depInterval)
+        return "<cities: %2d %2d, vehicle: %9s, time: %4d, cost: %3d, first: %4d, border: %4d, interval: %4d>" % (self.cities[0], self.cities[1], self.vehicle, self.time, self.cost, self.firstDep, self.noMoreDepTime, self.depInterval)
 
 class Graph:
     """Stores a set of all possible connections on the map."""
     def __init__(self, networkData, nCities, nConnections):    # initializes the network using networkData raw data list
         self.nCities = nCities
-        self.nCOnnections = nConnections
+        self.nConnections = nConnections
         self.network = []
         for edgeData in networkData:
             self.network.append(Edge(edgeData))
