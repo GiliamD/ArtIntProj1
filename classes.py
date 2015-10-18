@@ -128,12 +128,12 @@ class Client:
                 elif clData[8] == 'B1': self.maxTotalTime = clData[9]
                 elif clData[8] == 'B2': self.maxTotalCost = clData[9]
 
-    def expandNode(self, nodeNo, currTime, graph, heuristicsType = 'none'):    # expands given node using client's constraints
+    def expandNode(self, nodeNo, currTime, graph, ifHeuristics = False):    # expands given node using client's constraints
         nodes=[]    # initialize nodes list to return later
         for edge in graph.network:    # loop through all edges (connections)
             if edge.cities[0] == nodeNo or edge.cities[1] == nodeNo:      # if current city found in connection
-                if edge.vehicle != self.forbiddenVehicle or heuristicsType == 'cost':   # if vehicle is not forbidden (but when we are calculating heuristic cost value, this constraint should be omitted)
-                    if edge.time <= self.maxConnTime or heuristicsType == 'cost':       # if connection travel time does not exceed desired value (as above for cost heuristics)
+                if edge.vehicle != self.forbiddenVehicle or (ifHeuristics and self.optimCrit == 'cost'):    # if vehicle is not forbidden (but when we are calculating heuristic cost value, this constraint should be omitted)
+                    if edge.time <= self.maxConnTime or (ifHeuristics and self.optimCrit == 'cost'):       # if connection travel time does not exceed desired value (as above for cost heuristics)
                         if edge.cost <= self.maxConnCost:     # if connection travel cost does not exceed desired value
                             tmpTime = edge.firstDep          # initialize tmpTime
                             noMoreDepTime = edge.noMoreDepTime     # initialize noMoreDepTime
@@ -143,14 +143,14 @@ class Client:
                                     noMoreDepTime += 1440       # set the noMoreDepTime for the next day
                                     continue
                                 elif tmpTime >= currTime and tmpTime >= self.timeAvailable: # if we found next departure
-                                    if heuristicsType == 'time': time = edge.time    # calculate heuristic time (travelling)
+                                    if ifHeuristics and self.optimCrit == 'time': time = edge.time    # calculate heuristic time (travelling)
                                     else: time = tmpTime-currTime+edge.time     # calculate total time (waiting + travelling)
                                     cost = edge.cost                            # assign cost
 
                                     if edge.cities[0] == nodeNo: destinationCity = edge.cities[1]     # check to which city are we
                                     else: destinationCity = edge.cities[0]                     # actually going
 
-                                    nodes.append(Node(destinationCity, edge.vehicle, time, cost, self.optimCrit))    # append
+                                    nodes.append(Node(destinationCity, edge.vehicle, time, cost, self.optimCrit))# append
                                     break                                                 # new node to 'nodes' variable
                                 tmpTime += edge.depInterval
         from operator import attrgetter     # for easier sorting
@@ -158,5 +158,5 @@ class Client:
         nodes = sorted(nodes, key = attrgetter('cityNo'))   # and then by cityNo; possible because sorted() is stable
         for i in range(len(nodes)-1, 0, -1):    # iterate backward from the end to second (therefore node[1]) element
             if nodes[i].cityNo == nodes[i-1].cityNo:    # if node before has the same city
-                nodes.pop(i)    # delete it, because it has higher value
+                nodes.pop(i)    # delete current one, because it has higher value
         return nodes
