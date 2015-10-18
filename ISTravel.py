@@ -68,9 +68,18 @@ networkFile.close()
 clientsFile.close()
 
 
-####################################
-#       NEW CODE BELOW
-####################################
+class Graph:
+
+    def __init__(self, graph_dict={}):
+        self.graph_dict = graph_dict
+
+    def nodes(self):
+        return list(self.graph_dict.keys())
+
+    def connections(self):
+        return NotImplemented   # :P
+
+
 
 # Import heap queue module
 import heapq
