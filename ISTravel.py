@@ -13,35 +13,7 @@
 
 # Import libraries
 import sys
-
-
-# Function definitions
-def try_int(x):
-    """Tries to convert argument to type int."""
-    try:
-        return int(x)
-    except ValueError:
-        return x
-
-
-# Class definitions
-class InputData:
-    """Structures the input data."""
-    def __init__(self, network, clients):
-
-        # Network configuration
-        network_data = [line.rstrip().split() for line in network]
-        self.nCities = int(network_data[0][0])
-        self.nConnections = int(network_data[0][1])
-        self.network = [[try_int(network_data[lst][elem]) for elem in range(len(network_data[lst]))] for lst in
-                        range(1, len(network_data))]
-
-        # Client requests
-        client_data = [line.rstrip().split() for line in clients]
-        self.nClients = int(network_data[0][0])
-        self.clients = [[try_int(client_data[lst][elem]) for elem in range(len(client_data[lst]))] for lst in
-                        range(1, len(client_data))]
-
+import classes
 
 # Read input files
 try:
@@ -56,10 +28,11 @@ except FileNotFoundError:
     print('Specified file was not found!')
     quit()
 
-networkData = networkFile.readlines()
-clientsData = clientsFile.readlines()
+data = classes.InputData(networkFile.readlines(), clientsFile.readlines())
 
-data = InputData(networkData, clientsData)
+graph=classes.Graph(data.networkData, data.nCities, data.nConnections)
 
-
+client = classes.Client(data.clData[6])
+nodes = client.expandNode(1, 0, graph)
+for nod in nodes: print(nod)
 # Search algorithm
