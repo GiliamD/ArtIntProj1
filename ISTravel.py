@@ -14,6 +14,7 @@
 
 # Import libraries
 import sys
+import functions
 import classes
 
 # Read input files

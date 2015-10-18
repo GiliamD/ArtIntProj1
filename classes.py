@@ -116,35 +116,36 @@ class Client:
         self.timeAvailable = clData[3]  # put client time of availability in appropriate variable
         self.optimCrit = clData[4]      # put client optimality criterion in appropriate variable
         if clData[5] > 0:               # if there are some constraints
-            if   clData[6] == 'A1': self.forbiddenVehicle=clData[7]
-            elif clData[6] == 'A2': self.maxConnTime=clData[7]
-            elif clData[6] == 'A3': self.maxConnCost=clData[7]
-            elif clData[6] == 'B1': self.maxTotalTime=clData[7]
-            elif clData[6] == 'B2': self.maxTotalCost=clData[7]
+            if   clData[6] == 'A1': self.forbiddenVehicle = clData[7]
+            elif clData[6] == 'A2': self.maxConnTime = clData[7]
+            elif clData[6] == 'A3': self.maxConnCost = clData[7]
+            elif clData[6] == 'B1': self.maxTotalTime = clData[7]
+            elif clData[6] == 'B2': self.maxTotalCost = clData[7]
             if clData[5] == 2:
-                if   clData[8] == 'A1': self.forbiddenVehicle=clData[9]
-                elif clData[8] == 'A2': self.maxConnTime=clData[9]
-                elif clData[8] == 'A3': self.maxConnCost=clData[9]
-                elif clData[8] == 'B1': self.maxTotalTime=clData[9]
-                elif clData[8] == 'B2': self.maxTotalCost=clData[9]
+                if   clData[8] == 'A1': self.forbiddenVehicle = clData[9]
+                elif clData[8] == 'A2': self.maxConnTime = clData[9]
+                elif clData[8] == 'A3': self.maxConnCost = clData[9]
+                elif clData[8] == 'B1': self.maxTotalTime = clData[9]
+                elif clData[8] == 'B2': self.maxTotalCost = clData[9]
 
-    def expandNode(self, nodeNo, currTime, graph):    # expands given node using client's constraints
+    def expandNode(self, nodeNo, currTime, graph, heuristicsType = 'none'):    # expands given node using client's constraints
         nodes=[]    # initialize nodes list to return later
         for edge in graph.network:    # loop through all edges (connections)
             if edge.cities[0] == nodeNo or edge.cities[1] == nodeNo:      # if current city found in connection
-                if edge.vehicle != self.forbiddenVehicle:        # if vehicle is not forbidden
-                    if edge.time <= self.maxConnTime:         # if connection travel time does not exceed desired value
+                if edge.vehicle != self.forbiddenVehicle or heuristicsType == 'cost':   # if vehicle is not forbidden (but when we are calculating heuristic cost value, this constraint should be omitted)
+                    if edge.time <= self.maxConnTime or heuristicsType == 'cost':       # if connection travel time does not exceed desired value (as above for cost heuristics)
                         if edge.cost <= self.maxConnCost:     # if connection travel cost does not exceed desired value
                             tmpTime = edge.firstDep          # initialize tmpTime
                             noMoreDepTime = edge.noMoreDepTime     # initialize noMoreDepTime
                             while True:
                                 if tmpTime > noMoreDepTime:     # if we are after last departure
                                     tmpTime = edge.firstDep + 1440    # set the first departure of next day
-                                    noMoreDepTime =+ 1440       # set the noMoreDepTime for the next day
+                                    noMoreDepTime += 1440       # set the noMoreDepTime for the next day
                                     continue
                                 elif tmpTime >= currTime and tmpTime >= self.timeAvailable: # if we found next departure
-                                    time = tmpTime-currTime+edge.time    # calculate total time (waiting + travelling)
-                                    cost = edge.cost                     # assign cost
+                                    if heuristicsType == 'time': time = edge.time    # calculate heuristic time (travelling)
+                                    else: time = tmpTime-currTime+edge.time     # calculate total time (waiting + travelling)
+                                    cost = edge.cost                            # assign cost
 
                                     if edge.cities[0] == nodeNo: destinationCity = edge.cities[1]     # check to which city are we
                                     else: destinationCity = edge.cities[0]                     # actually going
