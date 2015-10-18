@@ -40,8 +40,8 @@ clientsFile.close()
 
 graph = classes.Graph(rawData.networkData, rawData.nCities, rawData.nConnections)    # graph variable initialization
 
-client = classes.Client(rawData.clData[1]) # just example - to show that it works - you can change this [1] to change the client number (should be deleted)
-nodes = client.expandNode(5, 0, graph)  # also example - client.expandNode(nodeNo, currentTime, graph)
+client = classes.Client(rawData.clData[6]) # just example - to show that it works - you can change this [1] to change the client number (should be deleted)
+nodes = client.expandNode(1, 20, graph, ifHeuristics = True)  # also example - client.expandNode(nodeNo, currentTime, graph)
 for nod in nodes: print(nod)            # just prints what came out
 
 

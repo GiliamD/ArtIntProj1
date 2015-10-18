@@ -132,8 +132,8 @@ class Client:
         nodes=[]    # initialize nodes list to return later
         for edge in graph.network:    # loop through all edges (connections)
             if edge.cities[0] == nodeNo or edge.cities[1] == nodeNo:      # if current city found in connection
-                if edge.vehicle != self.forbiddenVehicle or (ifHeuristics and self.optimCrit == 'cost'):    # if vehicle is not forbidden (but when we are calculating heuristic cost value, this constraint should be omitted)
-                    if edge.time <= self.maxConnTime or (ifHeuristics and self.optimCrit == 'cost'):       # if connection travel time does not exceed desired value (as above for cost heuristics)
+                if edge.vehicle != self.forbiddenVehicle or (ifHeuristics and self.optimCrit == 'custo'):    # if vehicle is not forbidden (but when we are calculating heuristic cost value, this constraint should be omitted)
+                    if edge.time <= self.maxConnTime or (ifHeuristics and self.optimCrit == 'custo'):       # if connection travel time does not exceed desired value (as above for cost heuristics)
                         if edge.cost <= self.maxConnCost:     # if connection travel cost does not exceed desired value
                             tmpTime = edge.firstDep          # initialize tmpTime
                             noMoreDepTime = edge.noMoreDepTime     # initialize noMoreDepTime
@@ -143,7 +143,7 @@ class Client:
                                     noMoreDepTime += 1440       # set the noMoreDepTime for the next day
                                     continue
                                 elif tmpTime >= currTime and tmpTime >= self.timeAvailable: # if we found next departure
-                                    if ifHeuristics and self.optimCrit == 'time': time = edge.time    # calculate heuristic time (travelling)
+                                    if ifHeuristics and self.optimCrit == 'tempo': time = edge.time    # calculate heuristic time (travelling)
                                     else: time = tmpTime-currTime+edge.time     # calculate total time (waiting + travelling)
                                     cost = edge.cost                            # assign cost
 
