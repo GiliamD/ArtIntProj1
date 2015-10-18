@@ -17,11 +17,11 @@ def heuristic(client, graph, start, goal):
 
 # Get path from start to goal
 
-def get_path(current, closed_list):
+def get_path(current, start, closed_list):
     """Traces path from current node back to start."""
 
     total_path = [current]
-    while current in closed_list:
+    while current in closed_list and current != start:
         total_path.append(closed_list[current][1])
         total_path.append(closed_list[current][0])
         current = closed_list[current][0]
@@ -62,7 +62,7 @@ def uniform_cost(client, graph, start, goal, ifHeuristics=False):
 
         # Check if current node is goal node
         if current == goal:
-            return get_path(current, closed_list), totalTime[current] - client.timeAvailable, totalCost[current]
+            return get_path(current, start, closed_list), totalTime[current] - client.timeAvailable, totalCost[current]
 
         # Let client expand current node according to specified constraints
         successors = client.expandNode(current, totalTime[current], graph, ifHeuristics)
@@ -136,7 +136,7 @@ def a_star(client, graph, start, goal):
 
         # Check if current node is goal node
         if current == goal:
-            return get_path(current, closed_list), totalTime[current] - client.timeAvailable, totalCost[current]
+            return get_path(current, start, closed_list), totalTime[current] - client.timeAvailable, totalCost[current]
 
         # Let client expand current node according to specified constraints
         successors = client.expandNode(current, totalTime[current], graph)
@@ -163,9 +163,6 @@ def a_star(client, graph, start, goal):
 
                 # Set priority equal to value function f(n) = g(n) + h(n)
                 priority = new_value + heuristic(client, graph, start, goal)
-
-                print(successor)
-                print(heuristic(client, graph, start, goal))
 
                 # Add successor to open list with specified priority
                 open_list.add(successor.cityNo, priority)
