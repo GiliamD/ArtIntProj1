@@ -154,7 +154,12 @@ class Client:
                                     break                                                 # new node to 'nodes' variable
                                 tmpTime += edge.depInterval
         from operator import attrgetter     # for easier sorting
-        nodes = sorted(nodes, key = attrgetter('value'))    # sort by value
+        if self.optimCrit == 'tempo':
+            nodes = sorted(nodes, key = attrgetter('cost'))    # sort by cost
+            nodes = sorted(nodes, key = attrgetter('time'))    # sort by time
+        elif self.optimCrit == 'custo':
+            nodes = sorted(nodes, key = attrgetter('time'))    # sort by time
+            nodes = sorted(nodes, key = attrgetter('cost'))    # sort by cost
         nodes = sorted(nodes, key = attrgetter('cityNo'))   # and then by cityNo; possible because sorted() is stable
         for i in range(len(nodes)-1, 0, -1):    # iterate backward from the end to second (therefore node[1]) element
             if nodes[i].cityNo == nodes[i-1].cityNo:    # if node before has the same city
