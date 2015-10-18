@@ -2,11 +2,17 @@
 
 from classes import *
 
+
 # Returns heuristic value of cost from current node to goal node
 
-def heuristics(client, start, goal):
-    [*heu_results] = uniform_cost(client, graph, start, goal, ifHeuristics = True)
-    # do something with results and return proper value (you can check if it's total time or cost in 'client' object)
+def heuristic(client, graph, start, goal):
+    [*heu_results] = uniform_cost(client, graph, start, goal, ifHeuristics=True)
+    if client.optimCrit == 'tempo':
+        # return total time for relaxed problem
+        return heu_results[-2]
+    else:
+        # return total cost for relaxed problem
+        return heu_results[-1]
 
 
 # Get path from start to goal
@@ -26,7 +32,7 @@ def get_path(current, closed_list):
 
 # Uninformed search algorithm
 
-def uniform_cost(client, graph, start, goal, ifHeuristics = False):
+def uniform_cost(client, graph, start, goal, ifHeuristics=False):
     """Searches the state space for the optimal path from the initial state to the goal state by selecting the node with
     the lowest path value first."""
 
@@ -71,7 +77,7 @@ def uniform_cost(client, graph, start, goal, ifHeuristics = False):
             tmpTotalTime = totalTime[current] + successor.time
             tmpTotalCost = totalCost[current] + successor.cost
 
-            # Check if total time or total cost exceeds constraints
+            # Discard if total time or total cost exceeds constraints
             if tmpTotalTime > client.maxTotalTime or tmpTotalCost > client.maxTotalCost:
                 continue
 
@@ -99,7 +105,7 @@ def uniform_cost(client, graph, start, goal, ifHeuristics = False):
 
 # Informed search algorithm
 
-def a_star(client, graph, start, goal, heuristic):
+def a_star(client, graph, start, goal):
     """Searches the state space for the optimal path from the initial state to the goal state, minimizing the value
     function f(n) = g(n) + h(n), where g(n) is the value from the initial node to the current node n and h(n) is the
     estimated value to reach the goal state from the current node, i.e. the heuristic value."""
@@ -141,13 +147,21 @@ def a_star(client, graph, start, goal, heuristic):
             # Compute path value (g value) from start to successor of current, via current
             new_value = current_best_value[current] + successor.value
 
+            # Compute total time and cost for successor
+            tmpTotalTime = totalTime[current] + successor.time
+            tmpTotalCost = totalCost[current] + successor.cost
+
+            # Discard if total time or total cost exceeds constraints
+            if tmpTotalTime > client.maxTotalTime or tmpTotalCost > client.maxTotalCost:
+                continue
+
             # If successor node not visited yet or if the new path value is better than the previously obtained value,
             # set or update the current best value for that node
             if successor not in current_best_value or new_value < current_best_value[successor]:
                 current_best_value[successor.cityNo] = new_value
 
                 # Set priority equal to value function f(n) = g(n) + h(n)
-                priority = new_value + heuristic(client, successor, goal)
+                priority = new_value + heuristic(client, graph, start, goal)
 
                 # Add successor to open list with specified priority
                 open_list.add(successor.cityNo, priority)
