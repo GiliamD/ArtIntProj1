@@ -4,8 +4,8 @@ from classes import *
 
 # Returns heuristic value of cost from current node to goal node
 
-def heuristics(client, startNode, goalNode):
-    [*heu_results] = uniform_cost(client, graph, startNode, goalNode, ifHeuristics = True)
+def heuristics(client, start, goal):
+    [*heu_results] = uniform_cost(client, graph, start, goal, ifHeuristics = True)
     # do something with results and return proper value (you can check if it's total time or cost in 'client' object)
 
 
@@ -67,9 +67,17 @@ def uniform_cost(client, graph, start, goal, ifHeuristics = False):
             # Compute path value (g value) from start to successor of current, via current
             new_value = current_best_value[current] + successor.value
 
+            # Compute total time and cost for successor
+            tmpTotalTime = totalTime[current] + successor.time
+            tmpTotalCost = totalCost[current] + successor.cost
+
+            # Check if total time or total cost exceeds constraints
+            if tmpTotalTime > client.maxTotalTime or tmpTotalCost > client.maxTotalCost:
+                continue
+
             # If successor node not visited yet or if the new path value is better than the previously obtained value,
             # set or update the current best value for that node
-            if successor.cityNo not in current_best_value or new_value < current_best_value[successor.cityNo]:
+            elif successor.cityNo not in current_best_value or new_value < current_best_value[successor.cityNo]:
                 current_best_value[successor.cityNo] = new_value
 
                 # Set priority equal to the path value g(n)
@@ -81,9 +89,9 @@ def uniform_cost(client, graph, start, goal, ifHeuristics = False):
                 # Add the current node to the closed list. Note that it was already removed from the open list
                 closed_list[successor.cityNo] = (current, successor.vehicle)
 
-                # Compute and store total time and cost for successor node
-                totalTime[successor.cityNo] = totalTime[current] + successor.time
-                totalCost[successor.cityNo] = totalCost[current] + successor.cost
+                # Store total time and cost for successor node
+                totalTime[successor.cityNo] = tmpTotalTime
+                totalCost[successor.cityNo] = tmpTotalCost
 
     # Return -1 if no path was found
     return -1
@@ -139,7 +147,7 @@ def a_star(client, graph, start, goal, heuristic):
                 current_best_value[successor.cityNo] = new_value
 
                 # Set priority equal to value function f(n) = g(n) + h(n)
-                priority = new_value + heuristic(successor, goal)
+                priority = new_value + heuristic(client, successor, goal)
 
                 # Add successor to open list with specified priority
                 open_list.add(successor.cityNo, priority)

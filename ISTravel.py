@@ -53,11 +53,11 @@ for clientNo in range(rawData.nClients):
     UC_result = ''.join(c for c in str(UC_result) if c not in '[](),\'')
 
     # Informed search
-    #AS_result = [clientNo+1]
-    #AS_result.append(a_star(graph, client.startCity, client.goalCity))
-    #AS_result = ''.join(c for c in str(AS_result) if c not in '[](),\'')
-
-    #print(UC_result == AS_result)
+    # AS_result = [clientNo+1]
+    # AS_result.append(a_star(client, graph, client.startCity, client.goalCity, ))
+    # AS_result = ''.join(c for c in str(AS_result) if c not in '[](),\'')
+    #
+    # print(UC_result == AS_result)
 
     results.append(UC_result+'\n')
 
