@@ -53,11 +53,11 @@ for clientNo in range(rawData.nClients):
     UC_result = ''.join(c for c in str(UC_result) if c not in '[](),\'')
 
     # Informed search
-    AS_result = [clientNo+1]
-    AS_result.append(a_star(client, graph, client.startCity, client.goalCity))
-    AS_result = ''.join(c for c in str(AS_result) if c not in '[](),\'')
-
-    print(UC_result == AS_result)
+    # AS_result = [clientNo+1]
+    # AS_result.append(a_star(client, graph, client.startCity, client.goalCity))
+    # AS_result = ''.join(c for c in str(AS_result) if c not in '[](),\'')
+    #
+    # print(UC_result == AS_result)
 
     results.append(UC_result+'\n')
 
@@ -65,3 +65,25 @@ for clientNo in range(rawData.nClients):
 outputFile = open(cliFileName.strip('.cli')+'.sol','w')
 outputFile.writelines(results)
 outputFile.close()
+
+
+# comparing with teacher's
+our=open(cliFileName.strip('.cli')+'.sol','r')
+teacher=open(cliFileName.strip('.cli')+'.solx','r')
+
+ourData=our.readlines()
+teacherData=teacher.readlines()
+
+ourDataSplitted = [line.rstrip().split() for line in ourData]
+teacherDataSplitted = [line.rstrip().split() for line in teacherData]
+
+for line in ourDataSplitted:
+    line.pop(len(line)-2)
+
+for line in teacherDataSplitted:
+    line.pop(len(line)-2)
+
+for i in range(len(ourDataSplitted)):
+    print('Client ',i+1,' the same: ',ourDataSplitted[i] == teacherDataSplitted[i])
+
+print('\n\nAll OK: ',ourDataSplitted == teacherDataSplitted)
