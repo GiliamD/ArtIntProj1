@@ -1,4 +1,6 @@
-# Function definitions
+# function definitions
+
+
 def try_int(x):
     """Tries to convert argument to type int."""
     try:
@@ -7,6 +9,26 @@ def try_int(x):
         return x
 
 # class definitions
+
+import heapq
+
+
+class PriorityQueue:
+    """Generic priority queue using Python's heap queue module."""
+    def __init__(self):
+        self.elements = []
+
+    def empty(self):
+        """Returns True if queue is empty."""
+        return not self.elements
+
+    def add(self, item, priority):
+        """Adds item to the queue with specified priority."""
+        heapq.heappush(self.elements, (priority, item))
+
+    def pop(self):
+        """Returns item with highest priority (i.e. lowest priority value) and removes it from the queue."""
+        return heapq.heappop(self.elements)[1]
 
 
 class InputData:
@@ -42,7 +64,7 @@ class Node:
                                                             # (which does not know the minimization criterion)
 
     def __repr__(self):
-        return "<city: %2d, vehicle: %9s, time: %4d, cost: %3d>" % (self.cityNo, self.vehicle, self.time, self.cost)
+        return "<city: %2d, vehicle: %9s, time: %4d, cost: %3d, value: %4d>" % (self.cityNo, self.vehicle, self.time, self.cost, self.value)
 
 
 class Edge:
@@ -134,6 +156,6 @@ class Client:
         nodes = sorted(nodes, key = attrgetter('value'))    # sort by value
         nodes = sorted(nodes, key = attrgetter('cityNo'))   # and then by cityNo; possible because sorted() is stable
         for i in range(len(nodes)-1, 0, -1):    # iterate backward from the end to second (therefore node[1]) element
-            if nodes[i].cityNo == nodes[i-1].cityNo:
-                nodes.pop(i)
+            if nodes[i].cityNo == nodes[i-1].cityNo:    # if node before has the same city
+                nodes.pop(i)    # delete it, because it has higher value
         return nodes

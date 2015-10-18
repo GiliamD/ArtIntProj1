@@ -14,35 +14,7 @@
 
 # Import libraries
 import sys
-
-
-# Function definitions
-def try_int(x):
-    """Tries to convert argument to type int."""
-    try:
-        return int(x)
-    except ValueError:
-        return x
-
-
-# Class definitions
-class InputData:
-    """Structures the input data."""
-
-    def __init__(self, network, clients):
-        # Network configuration
-        network_data = [line.rstrip().split() for line in network]
-        self.nCities = int(network_data[0][0])
-        self.nConnections = int(network_data[0][1])
-        self.network = [[try_int(network_data[lst][elem]) for elem in range(len(network_data[lst]))] for lst in
-                        range(1, len(network_data))]
-
-        # Client requests
-        client_data = [line.rstrip().split() for line in clients]
-        self.nClients = int(network_data[0][0])
-        self.clients = [[try_int(client_data[lst][elem]) for elem in range(len(client_data[lst]))] for lst in
-                        range(1, len(client_data))]
-
+import classes
 
 # Read input files
 try:
@@ -57,52 +29,19 @@ except FileNotFoundError:
     print('Specified file was not found!')
     quit()
 
-
-networkData = networkFile.readlines()
-clientsData = clientsFile.readlines()
-
-data = InputData(networkData, clientsData)
+rawData = classes.InputData(networkFile.readlines(), clientsFile.readlines())  # data variable initialization. It contains
+                                                                            # raw, splitted and stripped integers
+                                                                            # or strings
 
 # Close files after reading
 networkFile.close()
 clientsFile.close()
 
+graph = classes.Graph(rawData.networkData, rawData.nCities, rawData.nConnections)    # graph variable initialization
 
-class Graph:
-
-    def __init__(self, graph_dict={}):
-        self.graph_dict = graph_dict
-
-    def nodes(self):
-        return list(self.graph_dict.keys())
-
-    def connections(self):
-        return NotImplemented   # :P
-
-
-
-# Import heap queue module
-import heapq
-
-
-# Priority queue class
-
-class PriorityQueue:
-    """Generic priority queue using Python's heap queue module."""
-    def __init__(self):
-        self.elements = []
-
-    def empty(self):
-        """Returns True if queue is empty."""
-        return not self.elements
-
-    def add(self, item, priority):
-        """Adds item to the queue with specified priority."""
-        heapq.heappush(self.elements, (priority, item))
-
-    def pop(self):
-        """Returns item with highest priority (i.e. lowest priority value) and removes it from the queue."""
-        return heapq.heappop(self.elements)[1]
+client = classes.Client(rawData.clData[1]) # just example - to show that it works - you can change this [1] to change the client number (should be deleted)
+nodes = client.expandNode(5, 0, graph)  # also example - client.expandNode(nodeNo, currentTime, graph)
+for nod in nodes: print(nod)            # just prints what came out
 
 
 # Informed search algorithm
@@ -113,7 +52,7 @@ def a_star(graph, start, goal, heuristic):
     estimated cost to reach the goal state from the current node, i.e. the heuristic value."""
 
     # Initialize open list, closed list and path cost (estimate)
-    open_list = PriorityQueue()
+    open_list = classes.PriorityQueue()
     open_list.add(start, 0)
 
     closed_list = {}
@@ -178,7 +117,7 @@ def uniform_cost(graph, start, goal):
     the lowest path cost first."""
 
     # Initialize open list, closed list and path cost (estimate)
-    open_list = PriorityQueue()
+    open_list = classes.PriorityQueue()
     open_list.add(start, 0)
 
     closed_list = {}
