@@ -67,23 +67,23 @@ outputFile.writelines(results)
 outputFile.close()
 
 
-# comparing with teacher's
-our=open(cliFileName.strip('.cli')+'.sol','r')
-teacher=open(cliFileName.strip('.cli')+'.solx','r')
-
-ourData=our.readlines()
-teacherData=teacher.readlines()
-
-ourDataSplitted = [line.rstrip().split() for line in ourData]
-teacherDataSplitted = [line.rstrip().split() for line in teacherData]
-
-for line in ourDataSplitted:
-    line.pop(len(line)-2)
-
-for line in teacherDataSplitted:
-    line.pop(len(line)-2)
-
-for i in range(len(ourDataSplitted)):
-    print('Client ',i+1,' the same: ',ourDataSplitted[i] == teacherDataSplitted[i])
-
-print('\n\nAll OK: ',ourDataSplitted == teacherDataSplitted)
+# # comparing with teacher's
+# our=open(cliFileName.strip('.cli')+'.sol','r')
+# teacher=open(cliFileName.strip('.cli')+'.solx','r')
+#
+# ourData=our.readlines()
+# teacherData=teacher.readlines()
+#
+# ourDataSplitted = [line.rstrip().split() for line in ourData]
+# teacherDataSplitted = [line.rstrip().split() for line in teacherData]
+#
+# for line in ourDataSplitted:
+#     line.pop(len(line)-2)
+#
+# for line in teacherDataSplitted:
+#     line.pop(len(line)-2)
+#
+# for i in range(len(ourDataSplitted)):
+#     print('Client ',i+1,' the same: ',ourDataSplitted[i] == teacherDataSplitted[i])
+#
+# print('\n\nAll OK: ',ourDataSplitted == teacherDataSplitted)

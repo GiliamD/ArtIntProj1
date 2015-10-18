@@ -62,7 +62,7 @@ def uniform_cost(client, graph, start, goal, ifHeuristics=False):
 
         # Check if current node is goal node
         if current == goal:
-            return get_path(current, closed_list), totalTime[current], totalCost[current]
+            return get_path(current, closed_list), totalTime[current] - client.timeAvailable, totalCost[current]
 
         # Let client expand current node according to specified constraints
         successors = client.expandNode(current, totalTime[current], graph, ifHeuristics)
@@ -78,7 +78,7 @@ def uniform_cost(client, graph, start, goal, ifHeuristics=False):
             tmpTotalCost = totalCost[current] + successor.cost
 
             # Discard if total time or total cost exceeds constraints
-            if tmpTotalTime > client.maxTotalTime or tmpTotalCost > client.maxTotalCost:
+            if tmpTotalTime - client.timeAvailable > client.maxTotalTime or tmpTotalCost > client.maxTotalCost:
                 continue
 
             # If successor node not visited yet or if the new path value is better than the previously obtained value,
@@ -136,7 +136,7 @@ def a_star(client, graph, start, goal):
 
         # Check if current node is goal node
         if current == goal:
-            return get_path(current, closed_list), totalTime[current], totalCost[current]
+            return get_path(current, closed_list), totalTime[current] - client.timeAvailable, totalCost[current]
 
         # Let client expand current node according to specified constraints
         successors = client.expandNode(current, totalTime[current], graph)
@@ -152,16 +152,20 @@ def a_star(client, graph, start, goal):
             tmpTotalCost = totalCost[current] + successor.cost
 
             # Discard if total time or total cost exceeds constraints
-            if tmpTotalTime > client.maxTotalTime or tmpTotalCost > client.maxTotalCost:
+            if tmpTotalTime - client.timeAvailable > client.maxTotalTime or tmpTotalCost > client.maxTotalCost:
                 continue
 
             # If successor node not visited yet or if the new path value is better than the previously obtained value,
             # set or update the current best value for that node
+
             if successor not in current_best_value or new_value < current_best_value[successor]:
                 current_best_value[successor.cityNo] = new_value
 
                 # Set priority equal to value function f(n) = g(n) + h(n)
                 priority = new_value + heuristic(client, graph, start, goal)
+
+                print(successor)
+                print(heuristic(client, graph, start, goal))
 
                 # Add successor to open list with specified priority
                 open_list.add(successor.cityNo, priority)
@@ -170,8 +174,8 @@ def a_star(client, graph, start, goal):
                 closed_list[successor.cityNo] = (current, successor.vehicle)
 
                 # Compute and store total time and cost for successor node
-                totalTime[successor.cityNo] = totalTime[current] + successor.time
-                totalCost[successor.cityNo] = totalCost[current] + successor.cost
+                totalTime[successor.cityNo] = tmpTotalTime
+                totalCost[successor.cityNo] = tmpTotalCost
 
     # Return -1 if no path was found
     return -1
