@@ -67,6 +67,7 @@ outputFile.writelines(results)
 outputFile.close()
 
 
+
 # # comparing with teacher's
 # our=open(cliFileName.strip('.cli')+'.sol','r')
 # teacher=open(cliFileName.strip('.cli')+'.solx','r')
