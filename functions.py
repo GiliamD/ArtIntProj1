@@ -36,7 +36,7 @@ def get_path(current, start, closed_list):
 
 # Uninformed search algorithm
 
-def uniform_cost(client, graph, ifHeuristics=False):
+def uniform_cost(client, graph, ifHeuristics = False):
     """Searches the state space for the optimal path from the initial state to the goal state by selecting the node with
     the lowest path value first."""
 
