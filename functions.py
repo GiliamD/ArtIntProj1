@@ -6,7 +6,7 @@ from classes import *
 # Returns heuristic value of cost from current node to goal node
 
 def heuristic(client, graph, start, goal):
-    [*heu_results] = uniform_cost(client, graph, start, goal, ifHeuristics=True)
+    [*heu_results] = uniform_cost(client, graph, ifHeuristics=True)
     if client.optimCrit == 'tempo':
         # return total time for relaxed problem
         return heu_results[-2]
@@ -17,11 +17,11 @@ def heuristic(client, graph, start, goal):
 
 # Get path from start to goal
 
-def get_path(current, closed_list):
+def get_path(current, start, closed_list):
     """Traces path from current node back to start."""
 
     total_path = [current]
-    while current in closed_list:
+    while current in closed_list and current != start:
         total_path.append(closed_list[current][1])
         total_path.append(closed_list[current][0])
         current = closed_list[current][0]
@@ -32,9 +32,12 @@ def get_path(current, closed_list):
 
 # Uninformed search algorithm
 
-def uniform_cost(client, graph, start, goal, ifHeuristics=False):
+def uniform_cost(client, graph, ifHeuristics=False):
     """Searches the state space for the optimal path from the initial state to the goal state by selecting the node with
     the lowest path value first."""
+
+    start = client.startCity
+    goal = client.goalCity
 
     # Initialize open list, closed list and path value, which can be either cost or time
     open_list = PriorityQueue()
@@ -62,7 +65,7 @@ def uniform_cost(client, graph, start, goal, ifHeuristics=False):
 
         # Check if current node is goal node
         if current == goal:
-            return get_path(current, closed_list), totalTime[current] - client.timeAvailable, totalCost[current]
+            return get_path(current, start, closed_list), totalTime[current] - client.timeAvailable, totalCost[current]
 
         # Let client expand current node according to specified constraints
         successors = client.expandNode(current, totalTime[current], graph, ifHeuristics)
@@ -105,10 +108,13 @@ def uniform_cost(client, graph, start, goal, ifHeuristics=False):
 
 # Informed search algorithm
 
-def a_star(client, graph, start, goal):
+def a_star(client, graph):
     """Searches the state space for the optimal path from the initial state to the goal state, minimizing the value
     function f(n) = g(n) + h(n), where g(n) is the value from the initial node to the current node n and h(n) is the
     estimated value to reach the goal state from the current node, i.e. the heuristic value."""
+
+    start = client.startCity
+    goal = client.goalCity
 
     # Initialize open list, closed list and path value (estimate)
     open_list = PriorityQueue()
@@ -136,7 +142,7 @@ def a_star(client, graph, start, goal):
 
         # Check if current node is goal node
         if current == goal:
-            return get_path(current, closed_list), totalTime[current] - client.timeAvailable, totalCost[current]
+            return get_path(current, start, closed_list), totalTime[current] - client.timeAvailable, totalCost[current]
 
         # Let client expand current node according to specified constraints
         successors = client.expandNode(current, totalTime[current], graph)
