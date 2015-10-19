@@ -91,10 +91,6 @@ class Graph:
         for edgeData in networkData:
             self.network.append(Edge(edgeData))
 
-    def __repr__(self):
-        for edge in self.network:
-            print(edge)
-
 
 class Client:
     """Stores client preferences"""
