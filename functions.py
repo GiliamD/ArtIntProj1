@@ -25,6 +25,8 @@ def get_path(current, start, closed_list):
         total_path.append(closed_list[current][1])
         total_path.append(closed_list[current][0])
         current = closed_list[current][0]
+    total_path.append(closed_list[current][1])
+    total_path.append(closed_list[current][0])
 
     # Reverse order and get rid of None (the parent of the start node)
     return total_path[::-1][2:]
