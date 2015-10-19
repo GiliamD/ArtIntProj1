@@ -53,13 +53,14 @@ for clientNo in range(rawData.nClients):
     UC_result = ''.join(c for c in str(UC_result) if c not in '[](),\'')
 
     # Informed search
-    # AS_result = [clientNo+1]
-    # AS_result.append(a_star(client, graph))
-    # AS_result = ''.join(c for c in str(AS_result) if c not in '[](),\'')
+    AS_result = [clientNo+1]
+    AS_result.append(a_star(client, graph))
+    AS_result = ''.join(c for c in str(AS_result) if c not in '[](),\'')
 
-    # print(UC_result == AS_result)
+    print(UC_result == AS_result)
 
-    results.append(UC_result+'\n')
+    # results.append(UC_result+'\n')
+    results.append(AS_result+'\n')
 
 # Write results to output file. The the results from both algorithms should be the same, i.e. the optimal solution
 outputFile = open(cliFileName.strip('.cli')+'.sol','w')

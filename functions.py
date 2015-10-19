@@ -5,9 +5,11 @@ from classes import *
 
 # Returns heuristic value of cost from current node to goal node
 
-def heuristic(client, graph, start, goal):
-    [*heu_results] = uniform_cost(client, graph, ifHeuristics=True)
-    if client.optimCrit == 'tempo':
+def heuristic(client, graph):
+    heu_results = uniform_cost(client, graph, ifHeuristics=True)
+    if heu_results == -1:
+        return -1
+    elif client.optimCrit == 'tempo':
         # return total time for relaxed problem
         return heu_results[-2]
     else:
@@ -115,6 +117,9 @@ def a_star(client, graph):
     function f(n) = g(n) + h(n), where g(n) is the value from the initial node to the current node n and h(n) is the
     estimated value to reach the goal state from the current node, i.e. the heuristic value."""
 
+    if heuristic(client, graph) == -1:
+        return -1
+
     start = client.startCity
     goal = client.goalCity
 
@@ -166,14 +171,11 @@ def a_star(client, graph):
             # If successor node not visited yet or if the new path value is better than the previously obtained value,
             # set or update the current best value for that node
 
-            if successor not in current_best_value or new_value < current_best_value[successor]:
+            elif successor.cityNo not in current_best_value or new_value < current_best_value[successor.cityNo]:
                 current_best_value[successor.cityNo] = new_value
 
                 # Set priority equal to value function f(n) = g(n) + h(n)
-                priority = new_value + heuristic(client, graph, start, goal)
-
-                print(successor)
-                print(heuristic(client, graph, start, goal))
+                priority = new_value + heuristic(client, graph)
 
                 # Add successor to open list with specified priority
                 open_list.add(successor.cityNo, priority)
